@@ -1,0 +1,21 @@
+services:
+  adguard:
+    container_name: adguard
+    image: adguard/adguardhome
+    restart: unless-stopped
+    ports:
+      - 53:53/tcp
+      - 53:53/udp
+    networks:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.adguard.rule: Host(`adguard`)
+      traefik.http.services.adguard.loadbalancer.server.port: 3000
+    volumes:
+      - /containers/adguard/conf:/opt/adguardhome/conf
+      - /containers/adguard/data:/opt/adguardhome/work/data
+
+networks:
+  proxy:
+    external: true
